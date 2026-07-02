@@ -1,0 +1,21 @@
+name: Build HypicVIP Dylib
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          xcrun -sdk iphoneos clang -arch arm64 -dynamiclib \
+            -mios-version-min=14.0 \
+            -framework Foundation \
+            -o HypicVIP.dylib \
+            hypic_vip.m \
+            -Xlinker -dead_strip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HypicVIP-dylib
+          path: HypicVIP.dylib
